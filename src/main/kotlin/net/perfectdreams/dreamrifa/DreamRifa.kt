@@ -78,7 +78,7 @@ class DreamRifa : KotlinPlugin() {
 			lastWinnerPrize = money
 			broadcast("$PREFIX §b${displayName}§e ganhou a rifa! Parabéns! Prêmio: §2${money} Sonhos§e")
 
-            winner.balance += money
+			winner.balance += money
 
 			// TODO: Correios
 //			DreamCorreios.addItems(winner, true, true, ItemStack(Material.MAP, 1, 99)

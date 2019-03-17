@@ -11,7 +11,7 @@ class TagListener(val m: DreamRifa) : Listener {
 	fun onTag(e: ApplyPlayerTagsEvent) {
 		if (e.player.name == m.lastWinner) {
 			e.tags.add(
-					PlayerTag("§a§lS", "§a§lSortudo", listOf("§a${e.player.name}§7 é sortudo e ganhou na última §aRifa!§7"))
+				PlayerTag("§a§lS", "§a§lSortudo", listOf("§a${e.player.name}§7 é sortudo e ganhou na última §aRifa!§7"))
 			)
 		}
 	}

@@ -1,5 +1,6 @@
 package net.perfectdreams.dreamrifa.commands
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import net.perfectdreams.commands.annotation.Subcommand
 import net.perfectdreams.commands.bukkit.SparklyCommand
 import net.perfectdreams.commands.bukkit.SubcommandPermission
@@ -10,8 +11,11 @@ import net.perfectdreams.dreamcore.utils.hours
 import net.perfectdreams.dreamrifa.DreamRifa
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
+
+	val cooldownCache = Caffeine.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build<Player, Long>().asMap()
 
 	@Subcommand
 	fun root(sender: Player) {
@@ -30,6 +34,11 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 		val quantity = quantity.toIntOrNull() ?: 1
 		val price = quantity * 250
 
+		if (cooldownCache.getOrDefault(sender, 0) > System.currentTimeMillis()) {
+			sender.sendMessage(DreamRifa.PREFIX + " §eAcalme-se! Espere um pouco antes de executar este comando novamente!")
+			return
+		}
+
 		if (sender.balance >= price) {
 			for (i in 0 until quantity) {
 				sender.balance -= 250
@@ -40,6 +49,8 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 
 			broadcast(DreamRifa.PREFIX + " §b${sender.displayName}§e comprou ${quantity} ticket${if (quantity == 1) "" else "s"} por §2$price Sonhos§e! Está com sorte? Compre você também! §6/rifa comprar")
 			m.save()
+
+			cooldownCache[sender] = System.currentTimeMillis() + 30 * 1000
 		} else {
 			sender.sendMessage("${DreamRifa.PREFIX} §cVocê precisa ter §2+${price - sender.balance} Sonhos§c para poder comprar um ticket!")
 		}

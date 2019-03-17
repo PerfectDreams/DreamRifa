@@ -26,7 +26,7 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 	}
 
 	@Subcommand(["comprar", "buy"])
-	fun buy(sender: Player, quantity: String) {
+	fun buy(sender: Player, quantity: String = "1") {
 		val quantity = quantity.toIntOrNull() ?: 1
 		val price = quantity * 250
 

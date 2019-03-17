@@ -32,7 +32,7 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 
 		if (sender.balance >= price) {
 			for (i in 0 until quantity) {
-				sender.balance -= price
+				sender.balance -= 250
 				m.players.add(sender.name)
 			}
 			sender.sendMessage(DreamRifa.PREFIX + " §aVocê comprou ${quantity} ticket${if (quantity == 1) "" else "s"} por §2$price Sonhos§a! Agora é só sentar e relaxar até o resultado da rifa sair!")

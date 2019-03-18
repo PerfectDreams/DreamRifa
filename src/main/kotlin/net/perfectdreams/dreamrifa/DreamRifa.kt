@@ -46,7 +46,7 @@ class DreamRifa : KotlinPlugin() {
 
 	fun save() {
 		scheduler().schedule(this, SynchronizationContext.ASYNC) {
-			val loteriaConfig = File(dataFolder, "config.json")
+			val loteriaConfig = File(dataFolder, "data.json")
 
 			loteriaConfig.writeText(DreamUtils.gson.toJson(config))
 		}

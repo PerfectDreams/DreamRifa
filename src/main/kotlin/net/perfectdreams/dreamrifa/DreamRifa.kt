@@ -62,7 +62,7 @@ class DreamRifa : KotlinPlugin() {
 			data.lastWinner = winner.uniqueId
 
 			val displayName = Bukkit.getPlayerExact(winner.name)?.displayName ?: winner.name
-			val money = data.players.sumBy { it.tickets }
+			val money = data.players.sumBy { it.tickets * 250 }
 
 			data.lastWinnerPrize = money.toDouble()
 			broadcast("$PREFIX §b${displayName}§e ganhou a rifa! Parabéns! Prêmio: §2${money} Sonhos§e")

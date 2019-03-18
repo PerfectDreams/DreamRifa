@@ -27,7 +27,7 @@ class DreamRifa : KotlinPlugin() {
 
 		if (!configFile.exists()) {
 			configFile.createNewFile()
-			configFile.writeText("{}")
+			configFile.writeText(DreamUtils.gson.toJson(RifaData()))
 		}
 
 		data = DreamUtils.gson.fromJson(configFile.readText(), RifaData::class.java)
@@ -58,11 +58,11 @@ class DreamRifa : KotlinPlugin() {
 
 			data.started = System.currentTimeMillis()
 		} else {
-			val winner = Bukkit.getOfflinePlayer(data.players.keys.random())
+			val winner = Bukkit.getOfflinePlayer(data.players.random().uniqueId)
 			data.lastWinner = winner.uniqueId
 
 			val displayName = Bukkit.getPlayerExact(winner.name)?.displayName ?: winner.name
-			val money = data.players.keys.size * 250
+			val money = data.players.map { it.tickets }.size * 2
 
 			data.lastWinnerPrize = money.toDouble()
 			broadcast("$PREFIX §b${displayName}§e ganhou a rifa! Parabéns! Prêmio: §2${money} Sonhos§e")

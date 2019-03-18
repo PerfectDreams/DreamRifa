@@ -9,6 +9,7 @@ import net.perfectdreams.dreamcore.utils.balance
 import net.perfectdreams.dreamcore.utils.broadcast
 import net.perfectdreams.dreamcore.utils.hours
 import net.perfectdreams.dreamrifa.DreamRifa
+import net.perfectdreams.dreamrifa.utils.RifaPlayer
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.util.*
@@ -37,10 +38,15 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 		val quantity = quantity.toIntOrNull() ?: 1
 		val price = quantity * 250
 
-		val tickets = m.data.players.getOrDefault(sender.uniqueId, 0)
+		var rifaPlayer = m.data.players.firstOrNull { it.uniqueId == sender.uniqueId }
 
-		if (tickets + quantity > 5000) {
+		if (rifaPlayer == null) {
+			rifaPlayer = RifaPlayer(sender.uniqueId, 0).apply { m.data.players.add(this) }
+		}
+
+		if (rifaPlayer.tickets + quantity > 5000) {
 			sender.sendMessage(DreamRifa.PREFIX + " §eVocê só pode comprar 5000 tickets!")
+			return
 		}
 
 		if (cooldownCache.getOrDefault(sender, 0) > System.currentTimeMillis()) {
@@ -51,7 +57,7 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 		if (sender.balance >= price) {
 			sender.balance -= price
 
-			m.data.players[sender.uniqueId] = tickets + quantity
+			rifaPlayer.tickets += quantity
 
 			sender.sendMessage(DreamRifa.PREFIX + " §aVocê comprou ${quantity} ticket${if (quantity == 1) "" else "s"} por §2$price Sonhos§a! Agora é só sentar e relaxar até o resultado da rifa sair!")
 			sender.sendMessage(DreamRifa.PREFIX + " §7Querendo mais chances de ganhar? Que tal comprar outro ticket? ;) §6/rifa comprar [quantidade]")

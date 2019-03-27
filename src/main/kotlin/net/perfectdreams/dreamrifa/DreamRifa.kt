@@ -8,6 +8,7 @@ import net.perfectdreams.dreamrifa.listeners.TagListener
 import net.perfectdreams.dreamrifa.utils.RifaData
 import org.bukkit.Bukkit
 import java.io.File
+import java.util.*
 
 class DreamRifa : KotlinPlugin() {
 	companion object {
@@ -58,7 +59,15 @@ class DreamRifa : KotlinPlugin() {
 
 			data.started = System.currentTimeMillis()
 		} else {
-			val winner = Bukkit.getOfflinePlayer(data.players.random().uniqueId)
+			val uids = mutableListOf<UUID>()
+
+			data.players.forEach { player ->
+				repeat(player.tickets) {
+					uids.add(player.uniqueId)
+				}
+			}
+
+			val winner = Bukkit.getOfflinePlayer(uids.random())
 			data.lastWinner = winner.uniqueId
 
 			val displayName = Bukkit.getPlayerExact(winner.name)?.displayName ?: winner.name

@@ -22,7 +22,7 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 	@Subcommand
 	fun root(sender: Player) {
 		sender.sendMessage(DreamRifa.PREFIX + " §bPrêmio atual: §2${m.data.players.sumBy { it.tickets * 250 }} Sonhos")
-		sender.sendMessage(DreamRifa.PREFIX + " §bTickets comprados: §2${m.data.players.size} Tickets")
+		sender.sendMessage(DreamRifa.PREFIX + " §bTickets comprados: §2${m.data.players.sumBy { it.tickets }} Tickets")
 		sender.sendMessage(DreamRifa.PREFIX + " §bPessoas participando: §2${m.data.players.size} Players")
 
 		val lastWinner = Bukkit.getOfflinePlayer(m.data.lastWinner)

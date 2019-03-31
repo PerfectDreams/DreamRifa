@@ -27,15 +27,19 @@ class RifaCommand(val m: DreamRifa) : SparklyCommand(arrayOf("rifa")) {
 
 		val lastWinner = Bukkit.getOfflinePlayer(m.data.lastWinner)
 		sender.sendMessage(DreamRifa.PREFIX + " §bÚltimo ganhador: §2${lastWinner.name} (${m.data.lastWinnerPrize} Sonhos)")
-		val cal = Calendar.getInstance()
-		cal.timeInMillis = m.data.started + 1.hours.toMillis()
-		sender.sendMessage(DreamRifa.PREFIX + " §bResultado irá sair daqui a §3${DateUtils.formatDateDiff(Calendar.getInstance(), cal)}§b!")
+		sender.sendMessage(DreamRifa.PREFIX + " §bResultado irá sair daqui a §3${DateUtils.formatDateDiff(m.data.started + ((60 * 1000) * 60))}§b!")
 		sender.sendMessage(DreamRifa.PREFIX + " §3Compre um ticket por §2250 Sonhos§3 usando §6/rifa comprar§3!")
 	}
 
 	@Subcommand(["comprar", "buy"])
 	fun buy(sender: Player, quantity: String = "1") {
 		val quantity = quantity.toIntOrNull() ?: 1
+
+		if (quantity <= 0) {
+			sender.sendMessage(DreamRifa.PREFIX + "Você tem que comprar pelo menos 1 ticket!")
+			return
+		}
+
 		val price = quantity * 250
 
 		var rifaPlayer = m.data.players.firstOrNull { it.uniqueId == sender.uniqueId }

@@ -61,6 +61,11 @@ class DreamRifa : KotlinPlugin() {
 		} else {
 			val uids = mutableListOf<UUID>()
 
+			if (data.players.isEmpty()) {
+				data.started = System.currentTimeMillis()
+				return
+			}
+
 			data.players.forEach { player ->
 				repeat(player.tickets) {
 					uids.add(player.uniqueId)

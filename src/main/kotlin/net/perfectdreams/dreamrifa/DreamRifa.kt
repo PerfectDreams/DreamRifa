@@ -63,6 +63,8 @@ class DreamRifa : KotlinPlugin() {
 
 			if (data.players.isEmpty()) {
 				data.started = System.currentTimeMillis()
+
+				save()
 				return
 			}
 
